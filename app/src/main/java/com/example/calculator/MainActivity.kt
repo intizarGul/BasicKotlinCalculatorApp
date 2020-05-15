@@ -1,11 +1,13 @@
 package com.example.calculator
 
+import android.icu.text.DecimalFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import androidx.core.view.OneShotPreDrawListener.add
 import com.example.calculator.CalculatorModes.*
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.DecimalFormat as TextDecimalFormat
 
 enum class CalculatorModes {
     None,Addition,Subtraction,Multiplication
@@ -85,6 +87,14 @@ class MainActivity : AppCompatActivity() {
     }
     //to update the text
     private fun updateText(){
+        // check the length of the number
+        if(labelString.length > 8) {
+            didPressClear()
+            textView.text = "Large Num"
+            return
+        }
+
+
         //We need to convert 0 to a number so when it's pressed it not added
         val labelInt = labelString.toInt()
         /* once the 0 is converted to string now we need to convert
@@ -96,9 +106,10 @@ class MainActivity : AppCompatActivity() {
             savedNum = labelInt
         }
 
-
+        //format the numbers on screen
+        val df = DecimalFormat("#,###")
         // in this method we set the textView to the labelString Var
-        textView.text = labelString
+        textView.text = df.format(labelInt)
 
     }
     //change the calculator mode this method takes one parameter the calculator mode
